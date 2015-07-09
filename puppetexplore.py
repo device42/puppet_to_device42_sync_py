@@ -16,6 +16,8 @@ import argparse
 
 from puppetwrapper import PuppetWrapper
 import device42
+from nodefilter import node_filter
+
 
 logger = logging.getLogger('log')
 logger.setLevel(logging.INFO)
