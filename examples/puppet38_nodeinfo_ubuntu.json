@@ -1,0 +1,338 @@
+[
+    {
+        "architecture": "amd64", 
+        "augeas": {
+            "version": "1.4.0"
+        }, 
+        "augeasversion": "1.4.0", 
+        "bios_release_date": "05/06/2015", 
+        "bios_vendor": "Xen", 
+        "bios_version": "4.2.amazon", 
+        "blockdevice_xvda_size": 8589934592, 
+        "blockdevices": "xvda", 
+        "chassistype": "Other", 
+        "clientcert": "mynode01", 
+        "clientnoop": false, 
+        "clientversion": "4.2.0", 
+        "dhcp_servers": {
+            "eth0": "172.31.16.1", 
+            "system": "172.31.16.1"
+        }, 
+        "disks": {
+            "xvda": {
+                "size": "8.00 GiB", 
+                "size_bytes": 8589934592
+            }
+        }, 
+        "dmi": {
+            "bios": {
+                "release_date": "05/06/2015", 
+                "vendor": "Xen", 
+                "version": "4.2.amazon"
+            }, 
+            "chassis": {
+                "type": "Other"
+            }, 
+            "manufacturer": "Xen", 
+            "product": {
+                "name": "HVM domU"
+            }
+        }, 
+        "domain": "eu-west-1.compute.internal", 
+        "ec2_metadata": {
+            "ami-id": "ami-47a23a30", 
+            "ami-launch-index": "0", 
+            "ami-manifest-path": "(unknown)", 
+            "block-device-mapping": {
+                "ami": "/dev/sda1", 
+                "root": "/dev/sda1"
+            }, 
+            "hostname": "ip-172-31-29-23.eu-west-1.compute.internal", 
+            "instance-action": "none", 
+            "instance-id": "i-511414fb", 
+            "instance-type": "t2.micro", 
+            "local-hostname": "ip-172-31-29-23.eu-west-1.compute.internal", 
+            "local-ipv4": "172.31.29.23", 
+            "mac": "06:b2:c7:63:64:a3", 
+            "metrics": {
+                "vhostmd": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            }, 
+            "network": {
+                "interfaces": {
+                    "macs": {
+                        "06:b2:c7:63:64:a3": {
+                            "device-number": "0", 
+                            "interface-id": "eni-848b60cd", 
+                            "ipv4-associations": {
+                                "52.18.33.202": "172.31.29.23"
+                            }, 
+                            "local-hostname": "ip-172-31-29-23.eu-west-1.compute.internal", 
+                            "local-ipv4s": "172.31.29.23", 
+                            "mac": "06:b2:c7:63:64:a3", 
+                            "owner-id": "160840770916", 
+                            "public-hostname": "ec2-52-18-33-202.eu-west-1.compute.amazonaws.com", 
+                            "public-ipv4s": "52.18.33.202", 
+                            "security-group-ids": "sg-f44f0491\nsg-633a3d06", 
+                            "security-groups": "default\nlaunch-wizard-1", 
+                            "subnet-id": "subnet-94c94be3", 
+                            "subnet-ipv4-cidr-block": "172.31.16.0/20", 
+                            "vpc-id": "vpc-fb73dd9e", 
+                            "vpc-ipv4-cidr-block": "172.31.0.0/16"
+                        }
+                    }
+                }
+            }, 
+            "placement": {
+                "availability-zone": "eu-west-1c"
+            }, 
+            "profile": "default-hvm", 
+            "public-hostname": "ec2-52-18-33-202.eu-west-1.compute.amazonaws.com", 
+            "public-ipv4": "52.18.33.202", 
+            "public-keys": {
+                "0": {
+                    "openssh-key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCH6oBsaYWfEphSgO/JNkx5t/N6YP1FLlS7gjFPSUSn7b+4Scowfg31+3u31lPNFsxE90qdpHzfJInkWaUUHMz5mdr8NkssmZQ+H9YbxCwM6tq0IHHccSDhX/i6E5SRuwP6LVIrvRTpvJwSla6Nc5RCXmCBRHbqXVXbG9cx+85Nxj3Upnr1MH4jzCB9KyrDiYr0WZYF0cUGIVPH6cMNYrI/F4JRghTB/U+g9D9kMiZ+knijfl5UyfajwfeZbHesvgUHy5Om1+UCYm7/W+89Uw3meQbbT6En1pYjDwIimXHFoklWKsv/wSDmu8SddZSbXvpmtHr0bIjT4hFlyw2C9jfL euwestkey1"
+                }
+            }, 
+            "reservation-id": "r-273f15c0", 
+            "security-groups": "default\nlaunch-wizard-1", 
+            "services": {
+                "domain": "amazonaws.com"
+            }
+        }, 
+        "environment": "production", 
+        "facterversion": "3.0.1", 
+        "filesystems": "ext2,ext3,ext4,iso9660,vfat", 
+        "fqdn": "ip-172-31-29-23.eu-west-1.compute.internal", 
+        "gid": "ubuntu", 
+        "hardwareisa": "x86_64", 
+        "hardwaremodel": "x86_64", 
+        "hostname": "ip-172-31-29-23", 
+        "id": "ubuntu", 
+        "identity": {
+            "gid": 1000, 
+            "group": "ubuntu", 
+            "uid": 1000, 
+            "user": "ubuntu"
+        }, 
+        "interfaces": "eth0,lo", 
+        "ipaddress": "172.31.29.23", 
+        "ipaddress6": "fe80::4b2:c7ff:fe63:64a3", 
+        "ipaddress6_eth0": "fe80::4b2:c7ff:fe63:64a3", 
+        "ipaddress6_lo": "::1", 
+        "ipaddress_eth0": "172.31.29.23", 
+        "ipaddress_lo": "127.0.0.1", 
+        "is_virtual": true, 
+        "kernel": "Linux", 
+        "kernelmajversion": "3.13", 
+        "kernelrelease": "3.13.0-48-generic", 
+        "kernelversion": "3.13.0", 
+        "load_averages": {
+            "15m": 0.35, 
+            "1m": 0.44, 
+            "5m": 0.59
+        }, 
+        "lsbdistcodename": "trusty", 
+        "lsbdistdescription": "Ubuntu 14.04.2 LTS", 
+        "lsbdistid": "Ubuntu", 
+        "lsbdistrelease": "14.04", 
+        "lsbmajdistrelease": "14.04", 
+        "macaddress": "06:b2:c7:63:64:a3", 
+        "macaddress_eth0": "06:b2:c7:63:64:a3", 
+        "manufacturer": "Xen", 
+        "memory": {
+            "swap": {
+                "available": "4.00 GiB", 
+                "available_bytes": 4291416064, 
+                "capacity": "0.08%", 
+                "total": "4.00 GiB", 
+                "total_bytes": 4294963200, 
+                "used": "3.38 MiB", 
+                "used_bytes": 3547136
+            }, 
+            "system": {
+                "available": "505.02 MiB", 
+                "available_bytes": 529547264, 
+                "capacity": "49.12%", 
+                "total": "992.47 MiB", 
+                "total_bytes": 1040683008, 
+                "used": "487.46 MiB", 
+                "used_bytes": 511135744
+            }
+        }, 
+        "memoryfree": "505.02 MiB", 
+        "memoryfree_mb": 505.015625, 
+        "memorysize": "992.47 MiB", 
+        "memorysize_mb": 992.47265625, 
+        "mountpoints": {
+            "/": {
+                "available": "2.66 GiB", 
+                "available_bytes": 2853830656, 
+                "capacity": "65.66%", 
+                "device": "/dev/xvda1", 
+                "filesystem": "ext4", 
+                "options": [
+                    "rw", 
+                    "discard"
+                ], 
+                "size": "7.74 GiB", 
+                "size_bytes": 8309932032, 
+                "used": "5.08 GiB", 
+                "used_bytes": 5456101376
+            }
+        }, 
+        "mtu_eth0": 9001, 
+        "mtu_lo": 65536, 
+        "netmask": "255.255.240.0", 
+        "netmask6": "ffff:ffff:ffff:ffff::", 
+        "netmask6_eth0": "ffff:ffff:ffff:ffff::", 
+        "netmask6_lo": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", 
+        "netmask_eth0": "255.255.240.0", 
+        "netmask_lo": "255.0.0.0", 
+        "network": "172.31.16.0", 
+        "network6": "fe80::", 
+        "network6_eth0": "fe80::", 
+        "network6_lo": "::1", 
+        "network_eth0": "172.31.16.0", 
+        "network_lo": "127.0.0.0", 
+        "networking": {
+            "dhcp": "172.31.16.1", 
+            "domain": "eu-west-1.compute.internal", 
+            "fqdn": "ip-172-31-29-23.eu-west-1.compute.internal", 
+            "hostname": "ip-172-31-29-23", 
+            "interfaces": {
+                "eth0": {
+                    "dhcp": "172.31.16.1", 
+                    "ip": "172.31.29.23", 
+                    "ip6": "fe80::4b2:c7ff:fe63:64a3", 
+                    "mac": "06:b2:c7:63:64:a3", 
+                    "mtu": 9001, 
+                    "netmask": "255.255.240.0", 
+                    "netmask6": "ffff:ffff:ffff:ffff::", 
+                    "network": "172.31.16.0", 
+                    "network6": "fe80::"
+                }, 
+                "lo": {
+                    "ip": "127.0.0.1", 
+                    "ip6": "::1", 
+                    "mtu": 65536, 
+                    "netmask": "255.0.0.0", 
+                    "netmask6": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", 
+                    "network": "127.0.0.0", 
+                    "network6": "::1"
+                }
+            }, 
+            "ip": "172.31.29.23", 
+            "ip6": "fe80::4b2:c7ff:fe63:64a3", 
+            "mac": "06:b2:c7:63:64:a3", 
+            "mtu": 9001, 
+            "netmask": "255.255.240.0", 
+            "netmask6": "ffff:ffff:ffff:ffff::", 
+            "network": "172.31.16.0", 
+            "network6": "fe80::"
+        }, 
+        "operatingsystem": "Ubuntu", 
+        "operatingsystemmajrelease": "14.04", 
+        "operatingsystemrelease": "14.04", 
+        "os": {
+            "architecture": "amd64", 
+            "distro": {
+                "codename": "trusty", 
+                "description": "Ubuntu 14.04.2 LTS", 
+                "id": "Ubuntu", 
+                "release": {
+                    "full": "14.04", 
+                    "major": "14.04"
+                }
+            }, 
+            "family": "Debian", 
+            "hardware": "x86_64", 
+            "name": "Ubuntu", 
+            "release": {
+                "full": "14.04", 
+                "major": "14.04"
+            }, 
+            "selinux": {
+                "enabled": false
+            }
+        }, 
+        "osfamily": "Debian", 
+        "partitions": {
+            "/dev/xvda1": {
+                "filesystem": "ext4", 
+                "label": "cloudimg-rootfs", 
+                "mount": "/", 
+                "size": "7.99 GiB", 
+                "size_bytes": 8578967040, 
+                "uuid": "877c5daf-9427-49e3-8656-437c3f30fc84"
+            }
+        }, 
+        "path": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games", 
+        "physicalprocessorcount": 1, 
+        "processor0": "Intel(R) Xeon(R) CPU E5-2670 v2 @ 2.50GHz", 
+        "processorcount": 1, 
+        "processors": {
+            "count": 1, 
+            "isa": "x86_64", 
+            "models": [
+                "Intel(R) Xeon(R) CPU E5-2670 v2 @ 2.50GHz"
+            ], 
+            "physicalcount": 1
+        }, 
+        "productname": "HVM domU", 
+        "puppetversion": "4.2.0", 
+        "ruby": {
+            "platform": "x86_64-linux", 
+            "sitedir": "/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0", 
+            "version": "2.1.6"
+        }, 
+        "rubyplatform": "x86_64-linux", 
+        "rubysitedir": "/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0", 
+        "rubyversion": "2.1.6", 
+        "selinux": false, 
+        "ssh": {
+            "dsa": {
+                "fingerprints": {
+                    "sha1": "SSHFP 2 1 16d3f9879fd944e1c8697e419482953cd7a6ad80", 
+                    "sha256": "SSHFP 2 2 295d8d673db9fa27bd4383c4ddbce35075682bab98c069e38c32abddc29ea694"
+                }, 
+                "key": "AAAAB3NzaC1kc3MAAACBALo+3c9DTt37tSSf5Hw/WNhNmE3BL/en6IxUt60MK/tt7hhh8BM89dqJyHrftuoFUmaDzhruVoogVqPjVJ3Y95fxg/gCf7pF/IsftrQzSfqNICi1zYVKZPc9pyJ3knLymuxLeOKTwl/SjYT0GLyqbUfKXeP8gCIPMMeuMPJI98YtAAAAFQDJwKjfBbhNiWrame+ZTf0hC6eogQAAAIBZ1ml3dgRZZYxF/taAZD256fyWjFMYA4XHbYrFsMthWm0HKNhPTUSvnJPsU0TBjiJ26N3RArPnTm42oMxev3SWArArZLiAYIlKBIV1WcaC1MvOTYG/WOn/KAfSKGlYrsBCSQD9KECKlF96Bc8zYPgnhKZpjHBivuMD0UVvOx/QWwAAAIBnF7jIyRfMZmuL8RdWmZg5HqiCrfDIR7mFGI9Vatpjy4b3elx90sIrTbZAMs0Svy59Ovb7q4qq3DWYh+7rLCeekPBoDl6d+rG3W8KuPmgXkA5lih0LrHyQkbIUh9zfygWLpD+vwUHrit/seuyX6FjQXRZFed6+wMoK6Njp3CW6LQ=="
+            }, 
+            "ecdsa": {
+                "fingerprints": {
+                    "sha1": "SSHFP 3 1 819690c591b10368e53807c10a1c6316694ed537", 
+                    "sha256": "SSHFP 3 2 326901207bd6ad657e9707500fe27679ae72673e0b3ec5304722eb8dd1e80825"
+                }, 
+                "key": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNr1W7vfJOfUWOJSLMtce97OLKZxiyUPl6BDf3Jco5VnT+XfcRU5h+yezRiiZWM68sJK45cK9NQ7D5vo/RePuB8="
+            }, 
+            "rsa": {
+                "fingerprints": {
+                    "sha1": "SSHFP 1 1 0ce33d9bafe4309b14bb2b5b3a00668ace0c0f82", 
+                    "sha256": "SSHFP 1 2 235aa14dbb9b0358045590aef3449899fdf995ec28a32c3db16e15a89bcf4cc9"
+                }, 
+                "key": "AAAAB3NzaC1yc2EAAAADAQABAAABAQC80lv+TO/ctwcKcpSoDURExL7L0dd372RcvdL6xegiNHU8/vP9lM1M9P3thnGEJQeJwdAzbPBjs/K7rFY4Qfv56j1SAzmydK/6QZElRrOPGpJBICTKj2O+eU2iNJ2zr8yxyWVio9hmGWJwd8gj3M1GXUksB2eyWVK24x1RWNa82wjO83AV0Bg3eWNSfUx3ud+caxvkMI6A9lASFSvPD0acw/hfCPjzE2o/czVceJ7rUr9FMDnbvTYsOnwe2NFxOikWySDLWYAcw4GPdxPgr6+GghoCaCkMiLQLPRx7BzoSOOHmTsCoqhvsGFdCHI9aX8K0WKRsY8BSoeNeKgnilsq1"
+            }
+        }, 
+        "sshdsakey": "AAAAB3NzaC1kc3MAAACBALo+3c9DTt37tSSf5Hw/WNhNmE3BL/en6IxUt60MK/tt7hhh8BM89dqJyHrftuoFUmaDzhruVoogVqPjVJ3Y95fxg/gCf7pF/IsftrQzSfqNICi1zYVKZPc9pyJ3knLymuxLeOKTwl/SjYT0GLyqbUfKXeP8gCIPMMeuMPJI98YtAAAAFQDJwKjfBbhNiWrame+ZTf0hC6eogQAAAIBZ1ml3dgRZZYxF/taAZD256fyWjFMYA4XHbYrFsMthWm0HKNhPTUSvnJPsU0TBjiJ26N3RArPnTm42oMxev3SWArArZLiAYIlKBIV1WcaC1MvOTYG/WOn/KAfSKGlYrsBCSQD9KECKlF96Bc8zYPgnhKZpjHBivuMD0UVvOx/QWwAAAIBnF7jIyRfMZmuL8RdWmZg5HqiCrfDIR7mFGI9Vatpjy4b3elx90sIrTbZAMs0Svy59Ovb7q4qq3DWYh+7rLCeekPBoDl6d+rG3W8KuPmgXkA5lih0LrHyQkbIUh9zfygWLpD+vwUHrit/seuyX6FjQXRZFed6+wMoK6Njp3CW6LQ==", 
+        "sshecdsakey": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNr1W7vfJOfUWOJSLMtce97OLKZxiyUPl6BDf3Jco5VnT+XfcRU5h+yezRiiZWM68sJK45cK9NQ7D5vo/RePuB8=", 
+        "sshfp_dsa": "SSHFP 2 1 16d3f9879fd944e1c8697e419482953cd7a6ad80\nSSHFP 2 2 295d8d673db9fa27bd4383c4ddbce35075682bab98c069e38c32abddc29ea694", 
+        "sshfp_ecdsa": "SSHFP 3 1 819690c591b10368e53807c10a1c6316694ed537\nSSHFP 3 2 326901207bd6ad657e9707500fe27679ae72673e0b3ec5304722eb8dd1e80825", 
+        "sshfp_rsa": "SSHFP 1 1 0ce33d9bafe4309b14bb2b5b3a00668ace0c0f82\nSSHFP 1 2 235aa14dbb9b0358045590aef3449899fdf995ec28a32c3db16e15a89bcf4cc9", 
+        "sshrsakey": "AAAAB3NzaC1yc2EAAAADAQABAAABAQC80lv+TO/ctwcKcpSoDURExL7L0dd372RcvdL6xegiNHU8/vP9lM1M9P3thnGEJQeJwdAzbPBjs/K7rFY4Qfv56j1SAzmydK/6QZElRrOPGpJBICTKj2O+eU2iNJ2zr8yxyWVio9hmGWJwd8gj3M1GXUksB2eyWVK24x1RWNa82wjO83AV0Bg3eWNSfUx3ud+caxvkMI6A9lASFSvPD0acw/hfCPjzE2o/czVceJ7rUr9FMDnbvTYsOnwe2NFxOikWySDLWYAcw4GPdxPgr6+GghoCaCkMiLQLPRx7BzoSOOHmTsCoqhvsGFdCHI9aX8K0WKRsY8BSoeNeKgnilsq1", 
+        "swapfree": "4.00 GiB", 
+        "swapfree_mb": 4092.61328125, 
+        "swapsize": "4.00 GiB", 
+        "swapsize_mb": 4095.99609375, 
+        "system_uptime": {
+            "days": 0, 
+            "hours": 0, 
+            "seconds": 1014, 
+            "uptime": "0:16 hours"
+        }, 
+        "timezone": "UTC", 
+        "uptime": "0:16 hours", 
+        "uptime_days": 0, 
+        "uptime_hours": 0, 
+        "uptime_seconds": 1014, 
+        "virtual": "xenu"
+    }
+]

@@ -1,0 +1,25 @@
+# Puppet server settings
+puppet_server:
+    host: hostname
+    user: myuser
+    version: 4
+    environment: production
+    cert_file: mykey_cert.pem
+    key_file: mykey.pem
+    # ca_file: puppet_ca.pem
+
+# device42 settings
+device42:
+    host: myname.device42.com
+    user: myname
+    pass: mypassword
+
+# static options
+static:
+    customer: null
+    customer_id: null
+    service_level: null
+
+options:
+    # as_node_name: one of [fqdn, name]
+    as_node_name: fqdn
