@@ -73,10 +73,10 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3'):
             node_name = node.get('fqdn', node_name)
 
         # filtering by attributes
-        # if options.get('node_filter'):
-        #     if not node_filter(node, options['node_filter']):
-        #         logger.info("Skip node %s: filter not passed" % node_name)
-        #         continue  # filter not passed
+        if options.get('node_filter'):
+            if not node_filter(node, options['node_filter']):
+                logger.info("Skip node %s: filter not passed" % node_name)
+                continue  # filter not passed
 
         try:
             # device = dev42.get_device_by_name(node_name)

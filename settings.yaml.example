@@ -23,3 +23,4 @@ static:
 options:
     # as_node_name: one of [fqdn, name]
     as_node_name: fqdn
+    node_filter: []
