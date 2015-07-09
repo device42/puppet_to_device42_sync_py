@@ -17,13 +17,18 @@ You should get from the Puppet server (register client):
 * client's name
 * client's certificate
 * key for the client's certificate
+* Puppet server's CA certificate (not mandatory)
+* environment name for the nodes processing
 
-On the Puppet server there should be allowed for this client to connect to endpoints:
+
+On the Puppet server for this client there should be allowed connect to endpoints:
 
 * For Puppet version 3 or less: "{envname}/certificate_statuses/", "{envname}/node/"
 * For Puppet 4: "/puppet-ca/v1/certificate_statuses/", "/puppet/v3/node/"
 
 See files "auth.conf" and "/etc/puppetlabs/puppetserver/conf.d/ca.conf" (Puppet4)
+
+See [NodeFilter.md](./NodeFilter.md) for node filtering options.
 
 
 # Run

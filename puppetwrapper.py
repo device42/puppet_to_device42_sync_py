@@ -52,8 +52,12 @@ class PuppetWrapper(object):
             'Content-Type': 'text/json',
             'Accept': 'pson',
         })
+        verify = False
+        # If there is no CA file - don't verify certificates
+        if self.ca_file:
+            verify = self.ca_file
         resp = requests.request(method, url, data=data, params=params, cert=(self.cert_file, self.key_file),
-                                verify=False, headers=headers)
+                                verify=verify, headers=headers)
         if not resp.ok:
             raise PuppetHTTPError("HTTP %s (%s) Error %s: %s\n request was %s" %
                                   (method, path, resp.status_code, resp.text, (data or params)))
