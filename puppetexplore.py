@@ -12,6 +12,7 @@ import sys
 import yaml
 import logging
 import json
+import re
 import argparse
 
 from puppetwrapper import PuppetWrapper
@@ -35,6 +36,7 @@ parser.add_argument('-f', '--nodefile', help='Get node info from JSON file inste
 parser.add_argument('-S', '--savenodes', help='Save nodes info from Puppet server to json file')
 
 debugmode = False
+cpuf_re = re.compile(r'@ ([\w\d\.]+)GHz', re.I)
 
 
 def get_config(cfgpath):
@@ -101,10 +103,18 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3'):
             if is_virtual:
                 is_virtual = 'yes'
                 nodetype = 'virtual'
+                virtual_subtype = 'other'
                 if 'ec2_metadata' in node:
                     virtual_subtype = 'ec2'
             else:
                 is_virtual = 'no'
+
+            cpupower = 0
+            cpucount = node['processors']['physicalcount']
+            cpucores = node['processors']['count']
+            cpupowers = cpuf_re.findall(node['processors']['models'][0])
+            if cpupowers:
+                cpupower = int(float(cpupowers[0]) * 1000)
 
             data = {
                 'name': node_name,
@@ -115,9 +125,9 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3'):
                 'osver': node['operatingsystemrelease'],
 
                 'memory': totalmem,
-                'cpucount': node['processors']['count'],
-                'cpucore': 0,
-                'cpupower': 0,  # TODO
+                'cpucount': cpucount,
+                'cpucore': cpucores,
+                'cpupower': cpupower,
                 'hddcount': hddcount,
                 'hddsize': hddsize,
 
