@@ -242,7 +242,9 @@ def main():
         pupversion = puppet.version
     else:
         with open(args.nodefile, 'r') as nf:
-            puppetnodes = [json.loads(nf.read())]
+            puppetnodes = json.loads(nf.read())
+        if isinstance(puppetnodes, dict):
+            puppetnodes = [puppetnodes]
         pupversion = puppetnodes[0]['clientversion']
         logger.debug("Got %s nodes from file (v%s)" % (len(puppetnodes), pupversion))
 
