@@ -82,7 +82,25 @@ class PuppetWrapper(object):
                     pass
         return newdata
 
+    def get_status(self):
+        """ Auto-detect puppet version """
+        spathes = [
+            "puppet/v3/status/no_key?environment=%s" % self.environment,
+            "%s/status/no_key" % self.environment]
+        for spath in spathes:
+            try:
+                status = self._send('GET', spath)
+                self.version = status['version']
+                return status
+            except:
+                continue
+        return None
+
     def get_nodes(self):
+        """
+            Get list of certificates and then request node info ony-by-one
+        """
+        self.get_status()
         old_api = self.version[0] <= '3'
         if old_api:
             certs_path = "%s/certificate_statuses/*" % (self.environment)

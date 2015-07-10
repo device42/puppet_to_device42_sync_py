@@ -51,7 +51,7 @@ def get_config(cfgpath):
 
 
 def d42_update(dev42, nodes, options, static_opt, from_version='3'):
-    old_node = str(from_version or '3') <= '3'
+    old_node = str(from_version or '3')[0] <= '3'
 
     # get customer info
     customer_name = static_opt.get('customer')
@@ -226,6 +226,7 @@ def main():
 
     config = get_config(args.config)
 
+    pupversion = None
     if not args.nodefile:
         puppet = PuppetWrapper(
             host=config['puppet_server']['host'],
@@ -237,10 +238,13 @@ def main():
             key_file=config['puppet_server'].get('key_file'),
         )
         puppetnodes = puppet.get_nodes()
-        logger.debug("Got %s nodes from puppet" % len(puppetnodes))
+        logger.debug("Got %s nodes from puppet (v%s)" % (len(puppetnodes), puppet.version))
+        pupversion = puppet.version
     else:
         with open(args.nodefile, 'r') as nf:
             puppetnodes = [json.loads(nf.read())]
+        pupversion = puppetnodes[0]['clientversion']
+        logger.debug("Got %s nodes from file (v%s)" % (len(puppetnodes), pupversion))
 
     if args.savenodes:
         with open(args.savenodes, 'w') as wnf:
@@ -254,7 +258,7 @@ def main():
         debug=debugmode
     )
     d42_update(dev42, puppetnodes, config['options'], config.get('static', {}),
-               from_version=config['puppet_server'].get('version'))
+               from_version=pupversion)
 
     return 0
 
