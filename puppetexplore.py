@@ -110,8 +110,8 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3'):
                 is_virtual = 'no'
 
             cpupower = 0
-            cpucount = node['processors']['physicalcount']
-            cpucores = node['processors']['count']
+            cpucount = node['physicalprocessorcount']
+            cpucores = node['processorcount']
             cpupowers = cpuf_re.findall(node['processors']['models'][0])
             if cpupowers:
                 cpupower = int(float(cpupowers[0]) * 1000)
@@ -156,7 +156,7 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3'):
                     # update IPv4
                     ipdata = {
                         'ipaddress': ipaddr,
-                        'tag': ifsname,
+                        'tag': ifsname.replace('_', ' '),
                         'device': node_name,
                         'macaddress': macaddr,
                     }
