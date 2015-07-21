@@ -51,7 +51,7 @@ def get_config(cfgpath):
     return config
 
 
-def d42_update(dev42, nodes, options, static_opt, from_version='3'):
+def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=None):
     old_node = str(from_version or '3')[0] <= '3'
 
     # get customer info
@@ -141,6 +141,15 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3'):
             updateinfo = dev42.update_device(**data)
             deviceid = updateinfo['msg'][1]
             logger.info("Device %s updated/created (id %s)" % (node_name, deviceid))
+
+            if puppethost:
+                cfdata = {
+                    'name': node_name,
+                    'key': 'Puppet Node ID',
+                    'value': node_name,
+                    'notes': 'Puppet Server %s' % puppethost
+                }
+                updateinfo = dev42._put('device/custom_field', cfdata)
 
             # Dealing with IPs
             device_ips = dev42._get("ips", data={'device': node_name})['ips']
@@ -279,7 +288,7 @@ def main():
         debug=debugmode
     )
     d42_update(dev42, puppetnodes, config['options'], config.get('static', {}),
-               from_version=pupversion)
+               from_version=pupversion, puppethost=config['puppet_server']['host'])
 
     return 0
 

@@ -28,7 +28,6 @@ class Device42WrongRequest(Device42HTTPError):
 
 
 class Device42(object):
-    _SENDMETHODS = {'POST': requests.post, 'GET': requests.get, 'PUT': requests.put, 'DELETE': requests.delete}
 
     def __init__(self, endpoint, user, password, **kwargs):
         self.base = endpoint
@@ -42,15 +41,14 @@ class Device42(object):
 
     def _send(self, method, path, data=None):
         """ General method to send requests """
-        fmeth = self._SENDMETHODS[method.upper()]
         url = "%s/%s" % (self.base_url, path)
         params = None
         if method == 'GET':
             params = data
             data = None
-        resp = fmeth(url, data=data, params=params,
-                     auth=(self.user, self.pwd),
-                     verify=self.verify_cert, headers=self.headers)
+        resp = requests.request(method, url, data=data, params=params,
+                                auth=(self.user, self.pwd),
+                                verify=self.verify_cert, headers=self.headers)
         if not resp.ok:
             raise Device42HTTPError("HTTP %s (%s) Error %s: %s\n request was %s" %
                                     (method, path, resp.status_code, resp.text, data))
@@ -65,6 +63,11 @@ class Device42(object):
         if not path.endswith('/'):
             path += '/'
         return self._send("POST", path, data=data)
+
+    def _put(self, path, data):
+        if not path.endswith('/'):
+            path += '/'
+        return self._send("PUT", path, data=data)
 
     def _delete(self, path):
         return self._send("DELETE", path)
