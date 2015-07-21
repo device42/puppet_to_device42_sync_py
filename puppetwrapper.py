@@ -29,7 +29,7 @@ class PuppetWrapper(object):
     """
 
     def __init__(self, host, environment, user, version=None,
-                 cert_file=None, key_file=None, ca_file=None, logger=None, **kwargs):
+                 cert_file=None, key_file=None, ca_file=None, logger=None, onlynodes=None, **kwargs):
         self.host = host
         self.port = kwargs.get('port', '8140')
         self.environment = environment
@@ -40,6 +40,7 @@ class PuppetWrapper(object):
         self.version = str(version or "3")
         self.base_url = "https://%s:%s" % (self.host, self.port)
         self.logger = logger
+        self.onlynodes = onlynodes or []
 
     def _send(self, method, path, data=None, headers=None):
         url = "%s/%s" % (self.base_url, path)
@@ -121,6 +122,13 @@ class PuppetWrapper(object):
             if old_api:
                 nodeinfo = self._from_pson(nodeinfo['data'])
             if 'parameters' in nodeinfo:
-                all_nodes.append(nodeinfo['parameters'])
+                node = nodeinfo['parameters']
+                if onlynodes:
+                    if not (node.get('hostname') in onlynodes or
+                            node.get('ipaddress') in onlynodes or
+                            node.get('fqdn') in onlynodes or
+                            node.get('uuid') in onlynodes):
+                        continue
+                all_nodes.append(node)
 
         return all_nodes

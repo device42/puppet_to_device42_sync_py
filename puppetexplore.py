@@ -34,6 +34,7 @@ parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode - out
 parser.add_argument('-c', '--config', help='Config file', default='settings.yaml')
 parser.add_argument('-f', '--nodefile', help='Get node info from JSON file instead of Puppet server')
 parser.add_argument('-S', '--savenodes', help='Save nodes info from Puppet server to json file')
+parser.add_argument('-n', '--onlynode', action='append', help='Process only selected nodes (fqdn or hostname)')
 
 debugmode = False
 cpuf_re = re.compile(r'@ ([\w\d\.]+)GHz', re.I)
@@ -95,7 +96,8 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3'):
                 for p in node['disks'].values():
                     hddcount += 1
                     hddsize += int(p.get('size_bytes') or 0)
-                hddsize = hddsize >> 30  # convert to Gb ( hddsize/ 1024**3 )
+                if hddsize > 0:
+                    hddsize = 1.0 * hddsize / 1000 ** 3  # convert to Gb ( hddsize/ 1024**3 )
 
             nodetype = None
             is_virtual = str(node['is_virtual']).lower() == 'true'
@@ -223,6 +225,9 @@ def main():
     if args.quiet:
         logger.setLevel(logging.ERROR)
         debugmode = False
+    onlynodes = []
+    if args.onlynode:
+        onlynodes = args.onlynode
 
     config = get_config(args.config)
 
@@ -236,16 +241,30 @@ def main():
             ca_file=config['puppet_server'].get('ca_file'),
             cert_file=config['puppet_server'].get('cert_file'),
             key_file=config['puppet_server'].get('key_file'),
+            logger=logger,
+            onlynodes=onlynodes,
         )
         puppetnodes = puppet.get_nodes()
         logger.debug("Got %s nodes from puppet (v%s)" % (len(puppetnodes), puppet.version))
         pupversion = puppet.version
     else:
         with open(args.nodefile, 'r') as nf:
-            puppetnodes = json.loads(nf.read())
-        if isinstance(puppetnodes, dict):
-            puppetnodes = [puppetnodes]
-        pupversion = puppetnodes[0]['clientversion']
+            allpuppetnodes = json.loads(nf.read())
+        if isinstance(allpuppetnodes, dict):
+            allpuppetnodes = [allpuppetnodes]
+        pupversion = 0
+        puppetnodes = allpuppetnodes
+        if onlynodes:
+            puppetnodes = []
+            for node in allpuppetnodes:
+                if not (node.get('hostname') in onlynodes or
+                        node.get('ipaddress') in onlynodes or
+                        node.get('fqdn') in onlynodes or
+                        node.get('uuid') in onlynodes):
+                    continue
+                puppetnodes.append(node)
+        if puppetnodes:
+            pupversion = puppetnodes[0]['clientversion']
         logger.debug("Got %s nodes from file (v%s)" % (len(puppetnodes), pupversion))
 
     if args.savenodes:
