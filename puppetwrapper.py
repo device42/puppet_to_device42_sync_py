@@ -123,11 +123,11 @@ class PuppetWrapper(object):
                 nodeinfo = self._from_pson(nodeinfo['data'])
             if 'parameters' in nodeinfo:
                 node = nodeinfo['parameters']
-                if onlynodes:
-                    if not (node.get('hostname') in onlynodes or
-                            node.get('ipaddress') in onlynodes or
-                            node.get('fqdn') in onlynodes or
-                            node.get('uuid') in onlynodes):
+                if self.onlynodes:
+                    if not (node.get('hostname') in self.onlynodes or
+                            node.get('ipaddress') in self.onlynodes or
+                            node.get('fqdn') in self.onlynodes or
+                            node.get('uuid') in self.onlynodes):
                         continue
                 all_nodes.append(node)
 
