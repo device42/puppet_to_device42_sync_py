@@ -1,18 +1,32 @@
-# Puppet server settings
+# ========= Puppet
+
 puppet_server:
-    host: hostname
-    user: myuser
+    host: host
+    user: user
     # version: 4
     environment: production
     cert_file: mykey_cert.pem
     key_file: mykey.pem
     # ca_file: puppet_ca.pem
 
-# device42 settings
+
+# ========= Foreman
+
+foreman:
+    host: host
+    user: user
+    pass: pass
+
+
+# ========= Device 42
+
 device42:
-    host: myname.device42.com
-    user: myname
-    pass: mypassword
+    host: host
+    user: user
+    pass: passs
+
+
+# ========= Options
 
 # static options
 static:
