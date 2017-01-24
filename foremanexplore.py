@@ -139,7 +139,7 @@ def main():
     )
 
     d42_update(dev42, nodes, config['options'], config.get('static', {}),
-               from_version='4', puppethost=config['puppet_server']['host'])
+               from_version='4', puppethost=config['foreman']['host'])
 
     return 0
 

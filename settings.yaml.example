@@ -16,6 +16,8 @@ foreman:
     host: host
     user: user
     pass: pass
+    puppet_server: null
+
 
 
 # ========= Device 42
