@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-DESCRIPTION = """
-    Script file puppetexplore
-
-    Author: Anatolii Chmykhalo, 2017
-
-"""
-
 import os
 import sys
 import logging
@@ -25,7 +18,7 @@ logging.getLogger('foreman.client').setLevel(logging.CRITICAL)
 logger = logging.getLogger('log')
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
-parser = argparse.ArgumentParser(description="puppetexplore", epilog=DESCRIPTION)
+parser = argparse.ArgumentParser(description="foremanexploer")
 
 parser.add_argument('-d', '--debug', action='store_true', help='Enable debug output')
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode - outputs only errors')

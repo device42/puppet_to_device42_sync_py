@@ -19,7 +19,6 @@ foreman:
     puppet_server: null
 
 
-
 # ========= Device 42
 
 device42:

@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-    Lightweight wrapper for Device42 API: http://api.device42.com
-
-    Author: Alexey Kolyanov, 2015
-"""
 
 import os
 import requests

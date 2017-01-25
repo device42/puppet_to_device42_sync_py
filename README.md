@@ -7,26 +7,27 @@ You may use scripts for direct Puppet or/and Foreman discoveries.
 Take the file `settings.yaml.example` and rename it to `settings.yaml`. Then change the settings to correct ones.
 
 # Puppet Configure
-You should get from the Puppet server (register client):
+For proper connection clients certificate should be signed on puppet server and you should provide:
 
-* client's name
-* client's certificate
-* key for the client's certificate
-* Puppet server's CA certificate (not mandatory)
+* server username
+* client's certificate ( $HOME/.puppetlabs/etc/puppet/ssl/cert/<<node_name>>.pem, /etc/puppetlabs/puppet/ssl/cert/<<node_name>>.pem )
+* key for the client's certificate ( $HOME/.puppetlabs/etc/puppet/ssl/private_key/<<node_name>>.pem, /etc/puppetlabs/puppet/ssl/private_key/<<node_name>>.pem )
+* CA certificate (not mandatory) ( $HOME/.puppetlabs/etc/puppet/ssl/certs/ca.pem, /etc/puppetlabs/puppet/ssl/certs/ca.pem )
 * environment name for the nodes processing
 
 
 On the Puppet server for this client there should be allowed connect to endpoints:
 
 * For Puppet version 3 or less: "{envname}/certificate_statuses/", "{envname}/node/"
-* For Puppet 4: "/puppet-ca/v1/certificate_statuses/", "/puppet/v3/node/"
+* For Puppet 4: "/puppet-ca/v1/certificate_statuses/[*]", "/puppet/v3/node/"
 
-See files "auth.conf" and "/etc/puppetlabs/puppetserver/conf.d/ca.conf" (Puppet4)
+See files "auth.conf" and "/etc/puppetlabs/puppetserver/conf.d/ca.conf" (Puppet4).
+Please check config for default "/puppet-ca/v1/certificate_statuses/" restrictions, if found - edit or remove.
 
 See [NodeFilter.md](./NodeFilter.md) for node filtering options.
 
 # Foreman Configure
-Client there should be allowed connect to foreman API endpoints.
+Client should be allowed to connect to foreman api.
 
 # Run
 Puppet :

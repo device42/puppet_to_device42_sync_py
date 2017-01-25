@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-DESCRIPTION = """
-    Script file puppetexplore
-
-    Author: Alexey Kolyanov, 2015
-
-"""
-
 import os
 import sys
 import yaml
@@ -27,7 +20,7 @@ ch.setFormatter(logging.Formatter('%(asctime)-15s\t%(levelname)s\t %(message)s')
 logger.addHandler(ch)
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
-parser = argparse.ArgumentParser(description="puppetexplore", epilog=DESCRIPTION)
+parser = argparse.ArgumentParser(description="puppetexplore")
 
 parser.add_argument('-d', '--debug', action='store_true', help='Enable debug output')
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode - outputs only errors')
@@ -295,4 +288,5 @@ def main():
 
 if __name__ == "__main__":
     retval = main()
+    print 'Done'
     sys.exit(retval)

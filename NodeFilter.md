@@ -1,4 +1,3 @@
-
 # Filter nodes by attribute values
 
 There might be useful to process only specific nodes, having some values in the attributes. You may use `node_filter` in the settings (`options`) for this purpose.
