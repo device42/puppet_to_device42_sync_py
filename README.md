@@ -38,6 +38,22 @@ Foreman :
 ```
 python foremanexplore.py [-c /path/to/settings.yaml]
 ```
+
+# Command List
+```
+  -h, --help            show help message and exit
+  -d, --debug           Enable debug output
+  -q, --quiet           Quiet mode - outputs only errors
+  -c CONFIG, --config CONFIG
+                        Config file
+  -f NODEFILE, --nodefile NODEFILE
+                        Get node info from JSON file instead of Puppet server
+  -S SAVENODES, --savenodes SAVENODES
+                        Save nodes info from Puppet server to json file
+  -n ONLYNODE, --onlynode ONLYNODE
+                        Process only selected nodes (fqdn or hostname)
+```
+
 # Bugs / Feature Requests
 
 Please attach node info from puppet/facter while sending bugs/feature requests. It can help to understand your specifics.
