@@ -38,4 +38,5 @@ static:
 options:
     # as_node_name: one of [fqdn, name]
     as_node_name: fqdn
+    hostname_precedence: True
     node_filter: []

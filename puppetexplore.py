@@ -34,7 +34,6 @@ cpuf_re = re.compile(r'@ ([\w\d\.]+)GHz', re.I)
 
 
 def get_config(cfgpath):
-    config = {}
     if not os.path.exists(cfgpath):
         if not os.path.exists(os.path.join(CUR_DIR, cfgpath)):
             raise ValueError("Config file %s is not found!" % cfgpath)
@@ -130,6 +129,10 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
                 'customer': customer_name,
                 'service_level': static_opt.get('service_level'),
             }
+
+            if options.get('hostname_precedence'):
+                data.update({'new_name': node_name})
+
             logger.debug("Updating node %s" % node_name)
             updateinfo = dev42.update_device(**data)
             deviceid = updateinfo['msg'][1]
