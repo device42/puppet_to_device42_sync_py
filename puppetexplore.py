@@ -133,6 +133,9 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
             if options.get('hostname_precedence'):
                 data.update({'new_name': node_name})
 
+            if options.get('tags'):
+                data.update({'tags': options.get('tags')})
+
             logger.debug("Updating node %s" % node_name)
             updateinfo = dev42.update_device(**data)
             deviceid = updateinfo['msg'][1]
