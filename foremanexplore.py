@@ -50,14 +50,14 @@ def main():
 
     f = Foreman('https://%s' % host, (user, password), verify=False)
     node_ids = []
-    for node in f.hosts.index():
+    for node in f.hosts.index(per_page=100000):
         node = node['host']
         if len(onlynodes) > 0 and node['name'] in onlynodes:
             node_ids.append(node['id'])
         elif len(onlynodes) == 0:
             node_ids.append(node['id'])
 
-    facts_query = 'fqdn or memorysize_mb or is_virtual or processorcount or processors::models'
+    facts_query = 'fqdn or memorysize_mb or is_virtual or processorcount or processors::models or serialnumber' 
 
     nodes = []
     for node_id in node_ids:
@@ -95,17 +95,31 @@ def main():
                     formatted_interfaces[splitted[2]] = {}
                 formatted_interfaces[splitted[2]].update({splitted[3]: networking[key]})
 
+	# Check to see that we have all data, or set it to '' if not
+	if facts.has_key('is_virtual'):
+		_is_virtual = facts['is_virtual'] 
+	else:
+		_is_virtual = False
+        if facts.has_key('serialnumber'):
+		_serialnumber = facts['serialnumber']
+	else:
+		_serialnumber = ''
+        if facts.has_key('processors::models'):
+		_processors_models = ast.literal_eval(facts['processors::models'])
+	else:
+		_processors_models = ['']
         # prepare correct format
         data = {
             'hostname': host['name'],
             'memorysize_mb': facts['memorysize_mb'],
             'fqdn': facts['fqdn'],
             'disks': formatted_disks,
-            'is_virtual': facts['is_virtual'],
+            'is_virtual': _is_virtual,
+            'serial_no': _serialnumber,
             'physicalprocessorcount': facts['physicalprocessorcount'],
             'processorcount': facts['processorcount'],
             'processors': {
-                'models': ast.literal_eval(facts['processors::models'])
+                'models': _processors_models
             },
             'operatingsystem': host['os']['operatingsystem']['name'],
             'operatingsystemrelease': host['os']['operatingsystem']['release_name'],

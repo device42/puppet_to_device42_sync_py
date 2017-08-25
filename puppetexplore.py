@@ -81,6 +81,7 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
             # detect memory
             totalmem = int(float(node['memorysize_mb']))
 
+            serial_no = node['serial_no']
             # detect HDD
             hddcount = 0
             hddsize = 0  # first in bytes, then should be converted to Gb
@@ -124,6 +125,7 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
                 'cpupower': cpupower,
                 'hddcount': hddcount,
                 'hddsize': hddsize,
+                'serial_no': serial_no,
 
                 'macaddress': node['macaddress'],
                 'customer': customer_name,
