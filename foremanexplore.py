@@ -78,6 +78,9 @@ def main():
         networking = f.do_get('/api/hosts/%s/facts?search=networking&per_page=999' % node_id, {})
         networking = networking[host['name']] if host['name'] in networking else {}
 
+        if facts == {}:
+		continue
+
         formatted_disks = {}
         for key in disks:
             splitted = key.split('::')

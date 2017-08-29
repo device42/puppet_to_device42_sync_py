@@ -66,6 +66,7 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
             logger.debug("Skip node: no name found")
             continue
         node_name = node['hostname']
+       
         if options.get('as_node_name').upper() == 'FQDN':
             node_name = node.get('fqdn', node_name)
 
@@ -81,7 +82,6 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
             # detect memory
             totalmem = int(float(node['memorysize_mb']))
 
-            serial_no = node['serial_no']
             # detect HDD
             hddcount = 0
             hddsize = 0  # first in bytes, then should be converted to Gb
@@ -107,7 +107,12 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
             cpupower = 0
             cpucount = node['physicalprocessorcount']
             cpucores = node['processorcount']
-            cpupowers = cpuf_re.findall(node['processors']['models'][0])
+            
+            try:
+   	        cpupowers = cpuf_re.findall(node['processors']['models'][0])
+            except TypeError:
+                cpupowers = None            
+
             if cpupowers:
                 cpupower = int(float(cpupowers[0]) * 1000)
 
@@ -125,7 +130,6 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
                 'cpupower': cpupower,
                 'hddcount': hddcount,
                 'hddsize': hddsize,
-                'serial_no': serial_no,
 
                 'macaddress': node['macaddress'],
                 'customer': customer_name,
