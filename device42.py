@@ -45,7 +45,7 @@ class Device42(object):
                                 auth=(self.user, self.pwd),
                                 verify=self.verify_cert, headers=self.headers)
         if not resp.ok:
-            raise Device42HTTPError("HTTP %s (%s) Error %s: %s\n request was %s" %
+            raise Device42HTTPError("HTTP %s (%s) Error %s: %s request was %s" %
                                     (method, path, resp.status_code, resp.text, data))
         retval = resp.json()
         # print(retval)

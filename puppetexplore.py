@@ -208,9 +208,12 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
                             'macaddress': ifs['mac'],
                         }
                         # logger.debug("IP data: %s" % ipdata)
-                        updateinfo = dev42._post('ips', ipdata)
-                        updated_ips.append(updateinfo['msg'][1])
-                        logger.info("IP %s for device %s updated/created (id %s)" % (ifs['ip6'], node_name, deviceid))
+                        try:
+                            updateinfo = dev42._post('ips', ipdata)
+                            updated_ips.append(updateinfo['msg'][1])
+                            logger.info("IP %s for device %s updated/created (id %s)" % (ifs['ip6'], node_name, deviceid))
+                        except device42.Device42HTTPError as e:
+                            print e
 
             # Delete other IPs from the device
             if updated_ips:
