@@ -62,11 +62,15 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
 
     # processing all nodes
     for node in nodes:
+
         if 'hostname' not in node:
             logger.debug("Skip node: no name found")
             continue
+
+        if options.get('show_node'):
+            print node
+
         node_name = node['hostname']
-       
         if options.get('as_node_name').upper() == 'FQDN':
             node_name = node.get('fqdn', node_name)
 
@@ -169,7 +173,7 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
                     else:
                       get_depth(obj[item])
                 return res
-                
+
             if mapping:
                 full_depth = get_depth(mapping)
                 for element in full_depth:
