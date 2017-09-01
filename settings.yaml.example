@@ -28,7 +28,7 @@ device42:
 
 # custom fields mapping
 # mapping:
-#    # chef field / device42 field
+#    # puppet field / device42 field
 #    memory:
 #        vmalloc_used: test_field
 #    platform: test_field2
