@@ -43,7 +43,7 @@ def get_config(cfgpath):
     return config
 
 
-def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=None):
+def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', puppethost=None):
     old_node = str(from_version or '3')[0] <= '3'
 
     # get customer info
@@ -338,7 +338,7 @@ def main():
         logger=logger,
         debug=debugmode
     )
-    d42_update(dev42, puppetnodes, config['options'], config.get('static', {}),
+    d42_update(dev42, puppetnodes, config['options'], config.get('static', {}), config.get('mapping', {}),
                from_version=pupversion, puppethost=config['puppet_server']['host'])
 
     return 0

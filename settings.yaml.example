@@ -29,10 +29,10 @@ device42:
 # custom fields mapping
 # mapping:
 #    # puppet field / device42 field
-#    memory:
-#        vmalloc_used: test_field
-#    platform: test_field2
-#    filesystem: test_field3
+#    system_uptime:
+#        uptime: test_field
+#    kernel: test_field2
+
 
 
 # ========= Options
