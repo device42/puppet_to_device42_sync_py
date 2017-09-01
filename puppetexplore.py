@@ -169,30 +169,31 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
                     else:
                       get_depth(obj[item])
                 return res
-                    
-            full_depth = get_depth(mapping)
-            for element in full_depth:
-                for key in element:
-                    value = None
-                    step = node
+                
+            if mapping:
+                full_depth = get_depth(mapping)
+                for element in full_depth:
+                    for key in element:
+                        value = None
+                        step = node
 
-                    try:
-                        for x in element[key]:
-                            step = step[x]
-                    except KeyError:
-                        continue
+                        try:
+                            for x in element[key]:
+                                step = step[x]
+                        except KeyError:
+                            continue
 
-                    if type(step) in [unicode, str, int]:
-                        value = step
-                    elif type(step) in [list, tuple, dict]:
-                        value = len(step)
+                        if type(step) in [unicode, str, int]:
+                            value = step
+                        elif type(step) in [list, tuple, dict]:
+                            value = len(step)
 
-                    cfdata = {
-                        'name': node_name,
-                        'key': key,
-                        'value': value
-                    }
-                    updateinfo = dev42._put('device/custom_field', cfdata)
+                        cfdata = {
+                            'name': node_name,
+                            'key': key,
+                            'value': value
+                        }
+                        updateinfo = dev42._put('device/custom_field', cfdata)
 
             # Dealing with IPs
             device_ips = dev42._get("ips", data={'device': node_name})['ips']
