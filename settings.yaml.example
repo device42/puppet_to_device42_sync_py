@@ -26,6 +26,14 @@ device42:
     user: user
     pass: passs
 
+# custom fields mapping
+# mapping:
+#    # chef field / device42 field
+#    memory:
+#        vmalloc_used: test_field
+#    platform: test_field2
+#    filesystem: test_field3
+
 
 # ========= Options
 

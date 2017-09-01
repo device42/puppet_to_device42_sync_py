@@ -156,6 +156,44 @@ def d42_update(dev42, nodes, options, static_opt, from_version='3', puppethost=N
                 }
                 updateinfo = dev42._put('device/custom_field', cfdata)
 
+            global depth
+            depth = []
+            res = []
+            def get_depth(obj):
+                global depth
+                for item in obj:
+                    depth.append(item)
+                    if type(obj[item]) == str:
+                      res.append({obj[item]: depth})
+                      depth = []
+                    else:
+                      get_depth(obj[item])
+                return res
+                    
+            full_depth = get_depth(mapping)
+            for element in full_depth:
+                for key in element:
+                    value = None
+                    step = node
+
+                    try:
+                        for x in element[key]:
+                            step = step[x]
+                    except KeyError:
+                        continue
+
+                    if type(step) in [unicode, str, int]:
+                        value = step
+                    elif type(step) in [list, tuple, dict]:
+                        value = len(step)
+
+                    cfdata = {
+                        'name': node_name,
+                        'key': key,
+                        'value': value
+                    }
+                    updateinfo = dev42._put('device/custom_field', cfdata)
+
             # Dealing with IPs
             device_ips = dev42._get("ips", data={'device': node_name})['ips']
             updated_ips = []
