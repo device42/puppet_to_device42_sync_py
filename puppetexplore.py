@@ -180,7 +180,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                         try:
                             for x in element[key]:
                                 step = step[x]
-                        except TypeError:
+                        except KeyError:
                             continue
 
                         if type(step) in [unicode, str, int]:
