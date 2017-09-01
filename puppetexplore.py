@@ -100,20 +100,17 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             is_virtual = str(node['is_virtual']).lower() == 'true'
             virtual_subtype = None
             if is_virtual:
-                is_virtual = 'yes'
                 nodetype = 'virtual'
                 virtual_subtype = 'other'
                 if 'ec2_metadata' in node:
                     virtual_subtype = 'ec2'
-            else:
-                is_virtual = 'no'
 
             cpupower = 0
             cpucount = node['physicalprocessorcount']
             cpucores = node['processorcount']
             
             try:
-   	        cpupowers = cpuf_re.findall(node['processors']['models'][0])
+                cpupowers = cpuf_re.findall(node['processors']['models'][0])
             except TypeError:
                 cpupowers = None            
 
@@ -123,7 +120,6 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             data = {
                 'name': node_name,
                 'type': nodetype,
-                'is_it_virtual_host': is_virtual,
                 'virtual_subtype': virtual_subtype,
                 'os': node['operatingsystem'],
                 'osver': node['operatingsystemrelease'],
@@ -184,7 +180,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                         try:
                             for x in element[key]:
                                 step = step[x]
-                        except KeyError:
+                        except TypeError:
                             continue
 
                         if type(step) in [unicode, str, int]:
