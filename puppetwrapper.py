@@ -121,6 +121,8 @@ class PuppetWrapper(object):
             nodeinfo = self._send('GET', path)
             if old_api:
                 nodeinfo = self._from_pson(nodeinfo['data'])
+            else:
+                nodeinfo = self._from_pson(nodeinfo)
             if 'parameters' in nodeinfo:
                 node = nodeinfo['parameters']
                 if self.onlynodes:
