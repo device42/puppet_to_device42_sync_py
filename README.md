@@ -5,6 +5,7 @@ You may use scripts for direct Puppet or/and Foreman discoveries.
 
 # Requirements
 Take the file `settings.yaml.example` and rename it to `settings.yaml`. Then change the settings to correct ones.
+Install `requirements.txt` with pip. Please note that you need installed `python-devel`.
 
 # Puppet Configure
 For proper connection clients certificate should be signed on puppet server and you should provide:
