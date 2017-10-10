@@ -207,6 +207,8 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                     ipaddr = node['ipaddress_%s' % ifsname.lower()]
                     if ipaddr.startswith('127.0'):
                         continue  # local loopbacks
+                    if ipaddr.lower().startswith('fe80'):
+                        continue
                     macaddr = node['macaddress_%s' % ifsname.lower()]
                     # update IPv4
                     ipdata = {
