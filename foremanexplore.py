@@ -79,7 +79,7 @@ def main():
         networking = networking[host['name']] if host['name'] in networking else {}
 
         if facts == {}:
-		continue
+            continue
 
         formatted_disks = {}
         for key in disks:
@@ -90,28 +90,21 @@ def main():
                         'size_bytes': disks[key]
                     }
 
-        formatted_interfaces = {}
-        for key in networking:
-            splitted = key.split('::')
-            if len(splitted) == 4:
-                if splitted[2] not in formatted_interfaces:
-                    formatted_interfaces[splitted[2]] = {}
-                formatted_interfaces[splitted[2]].update({splitted[3]: networking[key]})
-
-	# Check to see that we have all data, or set it to '' if not
-	if facts.has_key('is_virtual'):
-		_is_virtual = facts['is_virtual'] 
-	else:
-		_is_virtual = False
+        # Check to see that we have all data, or set it to '' if not
+        if facts.has_key('is_virtual'):
+            _is_virtual = facts['is_virtual'] 
+        else:
+            _is_virtual = False
         if facts.has_key('serialnumber'):
-		_serialnumber = facts['serialnumber']
-	else:
-		_serialnumber = ''
+            _serialnumber = facts['serialnumber']
+        else:
+            _serialnumber = ''
         if facts.has_key('processors::models'):
-		_processors_models = ast.literal_eval(facts['processors::models'])
-	else:
-		_processors_models = ['']
-        # prepare correct format
+                _processors_models = ast.literal_eval(facts['processors::models'])
+        else:
+            _processors_models = ['']
+            # prepare correct format
+
         data = {
             'hostname': host['name'],
             'memorysize_mb': facts['memorysize_mb'],
@@ -127,9 +120,7 @@ def main():
             'operatingsystem': host['os']['operatingsystem']['name'],
             'operatingsystemrelease': host['os']['operatingsystem']['release_name'],
             'macaddress': host['mac'],
-            'networking': {
-                'interfaces': formatted_interfaces
-            }
+            'networking':  json.loads(networking['networking'].replace('"=>', '":'))
         }
         if len(ec2_metadata) > 0:
             data.update({'ec2_metadata': ec2_metadata})
@@ -148,7 +139,7 @@ def main():
         debug=debugmode
     )
 
-    d42_update(dev42, nodes, config['options'], config.get('static', {}),
+    d42_update(dev42, nodes, config['options'], config.get('static', {}), config.get('mapping', {}),
                from_version='4', puppethost=config['foreman']['host'])
 
     return 0

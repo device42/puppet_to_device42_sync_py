@@ -8,6 +8,7 @@ import json
 import re
 import argparse
 
+from netaddr import IPAddress
 from puppetwrapper import PuppetWrapper
 import device42
 from nodefilter import node_filter
@@ -229,6 +230,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                         continue  # filter out local interface
                     if ifs['ip'].startswith('127.0'):
                         continue  # local loopbacks
+
                     # update IPv4
                     ipdata = {
                         'ipaddress': ifs['ip'],
@@ -240,6 +242,22 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                     updateinfo = dev42._post('ips', ipdata)
                     updated_ips.append(updateinfo['msg'][1])
                     logger.info("IP %s for device %s updated/created (id %s)" % (ifs['ip'], node_name, deviceid))
+
+                    if 'network' in ifs and 'netmask' in ifs:
+                        # update IPv4 subnet
+                        mask = IPAddress(ifs['netmask']).netmask_bits()
+                        subdata = {
+                            'network': ifs['network'],
+                            'mask_bits': mask
+                        }
+                        # logger.debug("IP data: %s" % ipdata)
+                        updateinfo = dev42._post('subnets', subdata)
+                        updated_ips.append(updateinfo['msg'][1])
+                        logger.info("Subnet %s/%s for device %s updated/created (id %s)" % (ifs['network'], mask, node_name, deviceid))
+
+                    if 'ip6' in ifs and ifs['ip6'].startswith('fe80::'):
+                        continue  # local loopbacks
+
                     # update IPv6
                     if 'ip6' in ifs and len(ifs['ip6']) > 6:
                         ipdata = {
@@ -255,6 +273,21 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                             logger.info("IP %s for device %s updated/created (id %s)" % (ifs['ip6'], node_name, deviceid))
                         except device42.Device42HTTPError as e:
                             print e
+
+                        if 'network6' in ifs and 'netmask6' in ifs:
+                            # update IPv6 subnet
+                            mask =  IPAddress(ifs['netmask6']).netmask_bits()
+                            subdata = {
+                                'network': ifs['network6'],
+                                'mask_bits': mask
+                            }
+                            try:
+                                # logger.debug("IP data: %s" % ipdata)
+                                updateinfo = dev42._post('subnets', subdata)
+                                updated_ips.append(updateinfo['msg'][1])
+                                logger.info("Subnet %s/%s for device %s updated/created (id %s)" % (ifs['network6'], mask, node_name, deviceid))
+                            except device42.Device42HTTPError as e:
+                                print e
 
             # Delete other IPs from the device
             if updated_ips:
