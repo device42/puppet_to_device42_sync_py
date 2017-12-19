@@ -48,7 +48,7 @@ def main():
     user = config['foreman']['user']
     password = config['foreman']['pass']
 
-    f = Foreman('https://%s' % host, (user, password), verify=False)
+    f = Foreman('https://%s' % host, (user, password), verify=False, api_version=1)
     node_ids = []
     for node in f.hosts.index(per_page=100000):
         node = node['host']
@@ -77,6 +77,45 @@ def main():
         ec2_metadata = ec2_metadata[host['name']] if host['name'] in ec2_metadata else {}
         networking = f.do_get('/api/hosts/%s/facts?search=networking&per_page=999' % node_id, {})
         networking = networking[host['name']] if host['name'] in networking else {}
+
+        if 'networking::interfaces' in networking:
+            networking2 = {}
+            for x in networking:
+                value = networking[x]
+                if value:
+                    value = value.replace('"=>', '":')
+                    chain = x.split('::')
+
+                    last = False
+                    el = 0
+                    obj = networking2
+                    while not last:
+                        key = chain[el:el+1][0]
+                        el += 1
+                        if key not in obj:
+                            obj[key] = {}
+                        obj = obj[key]
+                        if len(chain) == el:
+                            last = True
+                            obj[key] = value
+
+            def clean_dict(obj):
+                for x in obj:
+                    try:
+                        obj[x] = obj[x][x]
+                    except:
+                        pass
+                    try:
+                        if type(obj[x]) == dict:
+                            obj[x] = clean_dict(obj[x])
+                    except:
+                        pass
+
+                return obj
+
+            networking = {
+                'networking': json.dumps(clean_dict(networking2['networking']))
+            }
 
         if facts == {}:
             continue
