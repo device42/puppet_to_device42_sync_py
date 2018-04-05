@@ -57,7 +57,7 @@ def main():
         elif len(onlynodes) == 0:
             node_ids.append(node['id'])
 
-    facts_query = 'fqdn or memorysize_mb or is_virtual or processorcount or processors::models or serialnumber' 
+    facts_query = 'fqdn or memorysize_mb or is_virtual or processorcount or processors::models or serialnumber'
 
     nodes = []
     for node_id in node_ids:
@@ -131,7 +131,7 @@ def main():
 
         # Check to see that we have all data, or set it to '' if not
         if facts.has_key('is_virtual'):
-            _is_virtual = facts['is_virtual'] 
+            _is_virtual = facts['is_virtual']
         else:
             _is_virtual = False
         if facts.has_key('serialnumber'):
@@ -159,7 +159,7 @@ def main():
             'operatingsystem': host['os']['operatingsystem']['name'],
             'operatingsystemrelease': host['os']['operatingsystem']['release_name'],
             'macaddress': host['mac'],
-            'networking':  json.loads(networking['networking'].replace('"=>', '":'))
+            'networking': json.loads(networking['networking'].replace('"=>', '":')) if 'networking' in networking else ''
         }
         if len(ec2_metadata) > 0:
             data.update({'ec2_metadata': ec2_metadata})
