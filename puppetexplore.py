@@ -109,11 +109,11 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             cpupower = 0
             cpucount = node['physicalprocessorcount']
             cpucores = node['processorcount']
-            
+
             try:
                 cpupowers = cpuf_re.findall(node['processors']['models'][0])
             except TypeError:
-                cpupowers = None            
+                cpupowers = None
 
             if cpupowers:
                 cpupower = int(float(cpupowers[0]) * 1000)
@@ -136,6 +136,9 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                 'customer': customer_name,
                 'service_level': static_opt.get('service_level'),
             }
+
+            if 'serial_no' in node:
+                data.update({'serial_no': node['serial_no']})
 
             if options.get('hostname_precedence'):
                 data.update({'new_name': node_name})
