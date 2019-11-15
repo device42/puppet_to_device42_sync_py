@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import datetime
 import os
 import sys
 import yaml
@@ -120,10 +120,12 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
 
             data = {
                 'name': node_name,
+                'new_name': node_name,
                 'type': nodetype,
                 'virtual_subtype': virtual_subtype,
                 'os': node['operatingsystem'],
-                'osver': node['operatingsystemrelease'],
+                'osver': None,
+                'osverno': None,
 
                 'memory': totalmem,
                 'cpucount': cpucount,
@@ -231,8 +233,12 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                 for ifsname, ifs in node['networking']['interfaces'].items():
                     if ifsname == 'lo':
                         continue  # filter out local interface
-                    if ifs['ip'].startswith('127.0'):
-                        continue  # local loopbacks
+
+                    try:
+                        if ifs['ip'].startswith('127.0'):
+                            continue  # local loopbacks
+                    except KeyError:
+                        continue
 
                     # update IPv4
                     ipdata = {
