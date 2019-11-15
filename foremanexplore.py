@@ -52,8 +52,9 @@ def main():
     f = Foreman('https://%s' % host, (user, password), verify=False, api_version=api_version)
 
     node_ids = []
+    hosts = f.hosts.index(per_page=100000)['results'] if api_version == 2 else f.hosts.index(per_page=100000)
 
-    for node in f.hosts.index(per_page=100000)['results']:
+    for node in hosts:
 
         if len(onlynodes) > 0 and node['name'] in onlynodes:
             node_ids.append(node['id'])
@@ -65,7 +66,7 @@ def main():
     nodes = []
     for node_id in node_ids:
 
-        host = f.hosts.show(id=node_id)
+        host = f.hosts.show(id=node_id) if api_version == 2 else f.hosts.show(id=node_id)['host']
 
         if len(onlynodes) > 0 and host['name'] not in onlynodes:
             continue
@@ -73,16 +74,20 @@ def main():
         host['model'] = f.models.show(id=host['model_id'])
         host['os'] = f.operatingsystems.show(id=host['operatingsystem_id'])
 
-        facts = f.do_get('/api/hosts/%s/facts?search=%s&per_page=999' % (node_id, facts_query), {})['results']
+        facts = f.do_get('/api/hosts/%s/facts?search=%s&per_page=999' % (node_id, facts_query), {})['results'] \
+            if api_version == 2 else f.do_get('/api/hosts/%s/facts?search=%s&per_page=999' % (node_id, facts_query), {})
         facts = facts[host['name']] if host['name'] in facts else {}
 
-        disks = f.do_get('/api/hosts/%s/facts?search=disks&per_page=999' % node_id, {})['results']
+        disks = f.do_get('/api/hosts/%s/facts?search=disks&per_page=999' % node_id, {})['results']\
+            if api_version == 2 else f.do_get('/api/hosts/%s/facts?search=disks&per_page=999' % node_id, {})
         disks = disks[host['name']] if host['name'] in disks else {}
 
-        ec2_metadata = f.do_get('/api/hosts/%s/facts?search=ec2_metadata&per_page=999' % node_id, {})['results']
+        ec2_metadata = f.do_get('/api/hosts/%s/facts?search=ec2_metadata&per_page=999' % node_id, {})['results']\
+            if api_version == 2 else f.do_get('/api/hosts/%s/facts?search=ec2_metadata&per_page=999' % node_id, {})
         ec2_metadata = ec2_metadata[host['name']] if host['name'] in ec2_metadata else {}
 
-        networking = f.do_get('/api/hosts/%s/facts?search=networking&per_page=999' % node_id, {})['results']
+        networking = f.do_get('/api/hosts/%s/facts?search=networking&per_page=999' % node_id, {})['results'] \
+            if api_version == 2 else f.do_get('/api/hosts/%s/facts?search=networking&per_page=999' % node_id, {})
         networking = networking[host['name']] if host['name'] in networking else {}
 
         if 'networking::interfaces' in networking:
@@ -151,6 +156,9 @@ def main():
             _processors_models = ['']
             # prepare correct format
 
+        operating_system = host['operatingsystem_name'] if api_version == 2 else host['os']['operatingsystem']['name']
+        operating_system_release = None if api_version == 2 else host['os']['operatingsystem']['release_name']
+
         data = {
             'hostname': host['name'],
             'memorysize_mb': facts['memorysize_mb'],
@@ -163,7 +171,8 @@ def main():
             'processors': {
                 'models': _processors_models
             },
-            'operatingsystem': host['operatingsystem_name'],
+            'operatingsystem': operating_system,
+            'operatingsystemrelease': operating_system_release,
             'macaddress': host['mac'],
             'networking': json.loads(networking['networking'].replace('"=>', '":')) if 'networking' in networking else ''
         }

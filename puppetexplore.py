@@ -124,8 +124,8 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                 'type': nodetype,
                 'virtual_subtype': virtual_subtype,
                 'os': node['operatingsystem'],
-                'osver': None,
-                'osverno': None,
+                'osver': node['operatingsystemrelease'],
+                'osverno': None,  # d42 API mentioned all 3 of these must be included if an update is made
 
                 'memory': totalmem,
                 'cpucount': cpucount,
