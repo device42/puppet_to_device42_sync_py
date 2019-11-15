@@ -16,6 +16,7 @@ foreman:
     host: host
     user: user
     pass: pass
+    api_version: 2
     puppet_server: null
 
 
