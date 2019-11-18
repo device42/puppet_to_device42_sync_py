@@ -159,8 +159,14 @@ def main():
         operating_system = host['os']['operatingsystem']['name'] if api_version == 1 else host['operatingsystem_name']
         operating_system_release = host['os']['operatingsystem']['release_name'] if api_version == 1 else None
 
+        # Device42 must have a valid host name to add a device
+        try:
+            host_name = host['name']
+        except KeyError:
+            continue
+
         data = {
-            'hostname': host['name'] if 'name' in host else '',
+            'hostname': host_name,
             'memorysize_mb': facts['memorysize_mb'] if 'memorysize_mb' in facts else '',
             'fqdn': facts['fqdn'] if 'fqdn' in facts else '',
             'disks': formatted_disks,
