@@ -156,24 +156,24 @@ def main():
             _processors_models = ['']
             # prepare correct format
 
-        operating_system = host['operatingsystem_name'] if api_version == 2 else host['os']['operatingsystem']['name']
-        operating_system_release = None if api_version == 2 else host['os']['operatingsystem']['release_name']
+        operating_system = host['os']['operatingsystem']['name'] if api_version == 1 else host['operatingsystem_name']
+        operating_system_release = host['os']['operatingsystem']['release_name'] if api_version == 1 else None
 
         data = {
-            'hostname': host['name'],
-            'memorysize_mb': facts['memorysize_mb'],
-            'fqdn': facts['fqdn'],
+            'hostname': host['name'] if 'name' in host else '',
+            'memorysize_mb': facts['memorysize_mb'] if 'memorysize_mb' in facts else '',
+            'fqdn': facts['fqdn'] if 'fqdn' in facts else '',
             'disks': formatted_disks,
             'is_virtual': _is_virtual,
             'serial_no': _serialnumber,
-            'physicalprocessorcount': facts['physicalprocessorcount'],
-            'processorcount': facts['processorcount'],
+            'physicalprocessorcount': facts['physicalprocessorcount'] if 'physicalprocessorcount' in facts else '',
+            'processorcount': facts['processorcount'] if 'processorcount' in facts else '',
             'processors': {
                 'models': _processors_models
             },
             'operatingsystem': operating_system,
             'operatingsystemrelease': operating_system_release,
-            'macaddress': host['mac'],
+            'macaddress': host['mac'] if 'mac' in host else '',
             'networking': json.loads(networking['networking'].replace('"=>', '":')) if 'networking' in networking else ''
         }
         if len(ec2_metadata) > 0:
