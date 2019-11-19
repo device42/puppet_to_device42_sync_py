@@ -103,7 +103,12 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                     hddsize = 1.0 * hddsize / 1000 ** 3  # convert to Gb ( hddsize/ 1024**3 )
 
             nodetype = None
-            is_virtual = str(node['is_virtual']).lower() == 'true'
+
+            try:
+                is_virtual = str(node['is_virtual']).lower() == 'true'
+            except KeyError:
+                is_virtual = False
+
             virtual_subtype = None
 
             if is_virtual:
@@ -113,8 +118,13 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                     virtual_subtype = 'ec2'
 
             cpupower = 0
-            cpucount = node['physicalprocessorcount']
-            cpucores = node['processorcount']
+
+            try:
+                cpucount = node['physicalprocessorcount']
+                cpucores = node['processorcount']
+            except KeyError:
+                cpucount = None
+                cpucores = None
 
             try:
                 cpupowers = cpuf_re.findall(node['processors']['models'][0])
@@ -171,6 +181,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             global depth
             depth = []
             res = []
+
             def get_depth(obj):
                 global depth
                 for item in obj:
