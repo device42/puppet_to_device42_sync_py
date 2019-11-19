@@ -56,10 +56,13 @@ def main():
 
     for node in hosts:
 
-        if len(onlynodes) > 0 and node['name'] in onlynodes:
-            node_ids.append(node['id'])
-        elif len(onlynodes) == 0:
-            node_ids.append(node['id'])
+        try:
+            if len(onlynodes) > 0 and node['name'] in onlynodes:
+                node_ids.append(node['id'])
+            elif len(onlynodes) == 0:
+                node_ids.append(node['id'])
+        except KeyError:
+            continue
 
     facts_query = 'fqdn or memorysize_mb or is_virtual or processorcount or processors::models or serialnumber'
 

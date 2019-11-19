@@ -50,6 +50,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
     # get customer info
     customer_name = static_opt.get('customer')
     customer_id = str(static_opt.get('customer_id') or '') or None
+
     if (not customer_id and customer_name) or (customer_id and not customer_name):
         allcustomers = dev42._get('customers')['Customers']
         for cst in allcustomers:
@@ -72,6 +73,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             print node
 
         node_name = node['hostname']
+
         if options.get('as_node_name').upper() == 'FQDN':
             node_name = node.get('fqdn', node_name)
 
@@ -84,8 +86,11 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
         try:
             # device = dev42.get_device_by_name(node_name)
 
-            # detect memory
-            totalmem = int(float(node['memorysize_mb']))
+            # try to detect memory
+            try:
+                totalmem = int(float(node['memorysize_mb']))
+            except (ValueError, KeyError):
+                totalmem = ''
 
             # detect HDD
             hddcount = 0
@@ -100,6 +105,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             nodetype = None
             is_virtual = str(node['is_virtual']).lower() == 'true'
             virtual_subtype = None
+
             if is_virtual:
                 nodetype = 'virtual'
                 virtual_subtype = 'other'
@@ -123,8 +129,8 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                 'new_name': node_name,
                 'type': nodetype,
                 'virtual_subtype': virtual_subtype,
-                'os': node['operatingsystem'],
-                'osver': node['operatingsystemrelease'],
+                'os': node['operatingsystem'] if 'operatingsystem' in node else '',
+                'osver': node['operatingsystemrelease'] if 'operatingsystemrelease' in node else '',
                 'osverno': None,  # d42 API mentioned all 3 of these must be included if an update is made
 
                 'memory': totalmem,
@@ -134,7 +140,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                 'hddcount': hddcount,
                 'hddsize': hddsize,
 
-                'macaddress': node['macaddress'],
+                'macaddress': node['macaddress'] if 'macaddress' in node else '',
                 'customer': customer_name,
                 'service_level': static_opt.get('service_level'),
             }
