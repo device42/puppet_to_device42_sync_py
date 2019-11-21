@@ -75,11 +75,11 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
 
         node_name = node['hostname']
 
-        if node_name == '' or node_name is None:
-            continue
-
         if options.get('as_node_name').upper() == 'FQDN':
             node_name = node.get('fqdn', node_name)
+
+        if node_name == '' or node_name is None:
+            continue
 
         # filtering by attributes
         if options.get('node_filter'):
