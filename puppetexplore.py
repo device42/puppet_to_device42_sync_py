@@ -40,7 +40,7 @@ def get_config(cfgpath):
             raise ValueError("Config file %s is not found!" % cfgpath)
         cfgpath = os.path.join(CUR_DIR, cfgpath)
     with open(cfgpath, 'r') as cfgf:
-        config = yaml.load(cfgf.read())
+        config = yaml.safe_load(cfgf.read())
     return config
 
 
@@ -60,7 +60,8 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             if customer_name and cst['name'] == customer_name:
                 customer_id = str(cst['id'])
                 break
-    logger.debug("Customer %s: '%s'" % (customer_id, customer_name))
+
+    logger.debug("Static: Customer ID: %s, Customer Name: '%s'" % (customer_id, customer_name))
 
     # processing all nodes
     for node in nodes:
@@ -73,6 +74,9 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             print node
 
         node_name = node['hostname']
+
+        if node_name == '' or node_name is None:
+            continue
 
         if options.get('as_node_name').upper() == 'FQDN':
             node_name = node.get('fqdn', node_name)
@@ -136,7 +140,6 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
 
             data = {
                 'name': node_name,
-                'new_name': node_name,
                 'type': nodetype,
                 'virtual_subtype': virtual_subtype,
                 'os': node['operatingsystem'] if 'operatingsystem' in node else '',
