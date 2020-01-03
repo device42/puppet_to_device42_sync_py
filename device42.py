@@ -41,6 +41,7 @@ class Device42(object):
         if method == 'GET':
             params = data
             data = None
+
         resp = requests.request(method, url, data=data, params=params,
                                 auth=(self.user, self.pwd),
                                 verify=self.verify_cert, headers=self.headers)
@@ -48,7 +49,6 @@ class Device42(object):
             raise Device42HTTPError("HTTP %s (%s) Error %s: %s request was %s" %
                                     (method, path, resp.status_code, resp.text, data))
         retval = resp.json()
-        # print(retval)
         return retval
 
     def _get(self, path, data=None):
@@ -74,10 +74,11 @@ class Device42(object):
     def update_device(self, **kwargs):
         """ See http://api.device42.com/#create/update-device-by-name """
         path = 'devices'
-        atleast_fields = "name serial_no uuid".split()
+        atleast_fields = ["name"]  # this is the only required field to create/update a device, serial and uuid opt
         known_fields = "new_name asset_no manufacturer hardware new_hardware is_it_switch"
         known_fields += " is_it_virtual_host is_it_blade_host in_service type service_level virtual_host"
-        known_fields += " blade_host slot_no storage_room_id storage_room os osver memory cpucount cpupower cpucore"
+        known_fields += " serial_no uuid"
+        known_fields += " blade_host slot_no storage_room_id storage_room os osver osverno memory cpucount cpupower cpucore"
         known_fields += " hddcount hddsize hddraid hddraid_type macaddress devices_in_cluster appcomps"
         known_fields += " customer contract_id contract"
         known_fields += " aliases subtype virtual_subtype notes tags"

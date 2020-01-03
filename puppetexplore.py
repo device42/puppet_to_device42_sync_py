@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import datetime
 import os
 import sys
 import yaml
@@ -40,7 +40,7 @@ def get_config(cfgpath):
             raise ValueError("Config file %s is not found!" % cfgpath)
         cfgpath = os.path.join(CUR_DIR, cfgpath)
     with open(cfgpath, 'r') as cfgf:
-        config = yaml.load(cfgf.read())
+        config = yaml.safe_load(cfgf.read())
     return config
 
 
@@ -50,6 +50,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
     # get customer info
     customer_name = static_opt.get('customer')
     customer_id = str(static_opt.get('customer_id') or '') or None
+
     if (not customer_id and customer_name) or (customer_id and not customer_name):
         allcustomers = dev42._get('customers')['Customers']
         for cst in allcustomers:
@@ -59,7 +60,8 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             if customer_name and cst['name'] == customer_name:
                 customer_id = str(cst['id'])
                 break
-    logger.debug("Customer %s: '%s'" % (customer_id, customer_name))
+
+    logger.debug("Static: Customer ID: %s, Customer Name: '%s'" % (customer_id, customer_name))
 
     # processing all nodes
     for node in nodes:
@@ -72,8 +74,12 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             print node
 
         node_name = node['hostname']
+
         if options.get('as_node_name').upper() == 'FQDN':
             node_name = node.get('fqdn', node_name)
+
+        if node_name == '' or node_name is None:
+            continue
 
         # filtering by attributes
         if options.get('node_filter'):
@@ -84,8 +90,11 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
         try:
             # device = dev42.get_device_by_name(node_name)
 
-            # detect memory
-            totalmem = int(float(node['memorysize_mb']))
+            # try to detect memory
+            try:
+                totalmem = int(float(node['memorysize_mb']))
+            except (ValueError, KeyError):
+                totalmem = ''
 
             # detect HDD
             hddcount = 0
@@ -98,8 +107,14 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                     hddsize = 1.0 * hddsize / 1000 ** 3  # convert to Gb ( hddsize/ 1024**3 )
 
             nodetype = None
-            is_virtual = str(node['is_virtual']).lower() == 'true'
+
+            try:
+                is_virtual = str(node['is_virtual']).lower() == 'true'
+            except KeyError:
+                is_virtual = False
+
             virtual_subtype = None
+
             if is_virtual:
                 nodetype = 'virtual'
                 virtual_subtype = 'other'
@@ -107,8 +122,13 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                     virtual_subtype = 'ec2'
 
             cpupower = 0
-            cpucount = node['physicalprocessorcount']
-            cpucores = node['processorcount']
+
+            try:
+                cpucount = node['physicalprocessorcount']
+                cpucores = node['processorcount']
+            except KeyError:
+                cpucount = None
+                cpucores = None
 
             try:
                 cpupowers = cpuf_re.findall(node['processors']['models'][0])
@@ -122,8 +142,9 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                 'name': node_name,
                 'type': nodetype,
                 'virtual_subtype': virtual_subtype,
-                'os': node['operatingsystem'],
-                'osver': node['operatingsystemrelease'],
+                'os': node['operatingsystem'] if 'operatingsystem' in node else '',
+                'osver': node['operatingsystemrelease'] if 'operatingsystemrelease' in node else '',
+                'osverno': None,  # d42 API mentioned all 3 of these must be included if an update is made
 
                 'memory': totalmem,
                 'cpucount': cpucount,
@@ -132,7 +153,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                 'hddcount': hddcount,
                 'hddsize': hddsize,
 
-                'macaddress': node['macaddress'],
+                'macaddress': node['macaddress'] if 'macaddress' in node else '',
                 'customer': customer_name,
                 'service_level': static_opt.get('service_level'),
             }
@@ -163,6 +184,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             global depth
             depth = []
             res = []
+
             def get_depth(obj):
                 global depth
                 for item in obj:
@@ -231,8 +253,12 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                 for ifsname, ifs in node['networking']['interfaces'].items():
                     if ifsname == 'lo':
                         continue  # filter out local interface
-                    if ifs['ip'].startswith('127.0'):
-                        continue  # local loopbacks
+
+                    try:
+                        if ifs['ip'].startswith('127.0'):
+                            continue  # local loopbacks
+                    except KeyError:
+                        continue
 
                     # update IPv4
                     ipdata = {

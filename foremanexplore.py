@@ -47,35 +47,50 @@ def main():
     host = config['foreman']['host']
     user = config['foreman']['user']
     password = config['foreman']['pass']
+    api_version = config['foreman']['api_version']
 
-    f = Foreman('https://%s' % host, (user, password), verify=False, api_version=1)
+    f = Foreman('https://%s' % host, (user, password), verify=False, api_version=api_version)
+
     node_ids = []
-    for node in f.hosts.index(per_page=100000):
-        node = node['host']
-        if len(onlynodes) > 0 and node['name'] in onlynodes:
-            node_ids.append(node['id'])
-        elif len(onlynodes) == 0:
-            node_ids.append(node['id'])
+    hosts = f.hosts.index(per_page=100000) if api_version == 1 else f.hosts.index(per_page=100000)['results']
+
+    for node in hosts:
+
+        try:
+            if len(onlynodes) > 0 and node['name'] in onlynodes:
+                node_ids.append(node['id'])
+            elif len(onlynodes) == 0:
+                node_ids.append(node['id'])
+        except KeyError:
+            continue
 
     facts_query = 'fqdn or memorysize_mb or is_virtual or processorcount or processors::models or serialnumber'
 
     nodes = []
     for node_id in node_ids:
 
-        host = f.hosts.show(id=node_id)['host']
+        host = f.hosts.show(id=node_id)['host'] if api_version == 1 else f.hosts.show(id=node_id)
 
         if len(onlynodes) > 0 and host['name'] not in onlynodes:
             continue
 
         host['model'] = f.models.show(id=host['model_id'])
         host['os'] = f.operatingsystems.show(id=host['operatingsystem_id'])
-        facts = f.do_get('/api/hosts/%s/facts?search=%s&per_page=999' % (node_id, facts_query), {})
+
+        facts = f.do_get('/api/hosts/%s/facts?search=%s&per_page=999' % (node_id, facts_query), {})\
+            if api_version == 1 else f.do_get('/api/hosts/%s/facts?search=%s&per_page=999' % (node_id, facts_query), {})['results']
         facts = facts[host['name']] if host['name'] in facts else {}
-        disks = f.do_get('/api/hosts/%s/facts?search=disks&per_page=999' % node_id, {})
+
+        disks = f.do_get('/api/hosts/%s/facts?search=disks&per_page=999' % node_id, {})\
+            if api_version == 1 else f.do_get('/api/hosts/%s/facts?search=disks&per_page=999' % node_id, {})['results']
         disks = disks[host['name']] if host['name'] in disks else {}
-        ec2_metadata = f.do_get('/api/hosts/%s/facts?search=ec2_metadata&per_page=999' % node_id, {})
+
+        ec2_metadata = f.do_get('/api/hosts/%s/facts?search=ec2_metadata&per_page=999' % node_id, {})\
+            if api_version == 1 else f.do_get('/api/hosts/%s/facts?search=ec2_metadata&per_page=999' % node_id, {})['results']
         ec2_metadata = ec2_metadata[host['name']] if host['name'] in ec2_metadata else {}
-        networking = f.do_get('/api/hosts/%s/facts?search=networking&per_page=999' % node_id, {})
+
+        networking = f.do_get('/api/hosts/%s/facts?search=networking&per_page=999' % node_id, {}) \
+            if api_version == 1 else f.do_get('/api/hosts/%s/facts?search=networking&per_page=999' % node_id, {})['results']
         networking = networking[host['name']] if host['name'] in networking else {}
 
         if 'networking::interfaces' in networking:
@@ -144,21 +159,30 @@ def main():
             _processors_models = ['']
             # prepare correct format
 
+        operating_system = host['os']['operatingsystem']['name'] if api_version == 1 else host['operatingsystem_name']
+        operating_system_release = host['os']['operatingsystem']['release_name'] if api_version == 1 else None
+
+        # Device42 must have a valid host name to add a device
+        try:
+            host_name = host['name']
+        except KeyError:
+            continue
+
         data = {
-            'hostname': host['name'],
-            'memorysize_mb': facts['memorysize_mb'],
-            'fqdn': facts['fqdn'],
+            'hostname': host_name,
+            'memorysize_mb': facts['memorysize_mb'] if 'memorysize_mb' in facts else '',
+            'fqdn': facts['fqdn'] if 'fqdn' in facts else '',
             'disks': formatted_disks,
             'is_virtual': _is_virtual,
             'serial_no': _serialnumber,
-            'physicalprocessorcount': facts['physicalprocessorcount'],
-            'processorcount': facts['processorcount'],
+            'physicalprocessorcount': facts['physicalprocessorcount'] if 'physicalprocessorcount' in facts else '',
+            'processorcount': facts['processorcount'] if 'processorcount' in facts else '',
             'processors': {
                 'models': _processors_models
             },
-            'operatingsystem': host['os']['operatingsystem']['name'],
-            'operatingsystemrelease': host['os']['operatingsystem']['release_name'],
-            'macaddress': host['mac'],
+            'operatingsystem': operating_system,
+            'operatingsystemrelease': operating_system_release,
+            'macaddress': host['mac'] if 'mac' in host else '',
             'networking': json.loads(networking['networking'].replace('"=>', '":')) if 'networking' in networking else ''
         }
         if len(ec2_metadata) > 0:
@@ -182,6 +206,7 @@ def main():
                from_version='4', puppethost=config['foreman']['host'])
 
     return 0
+
 
 if __name__ == "__main__":
     retval = main()
