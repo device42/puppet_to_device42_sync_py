@@ -145,15 +145,15 @@ def main():
                     }
 
         # Check to see that we have all data, or set it to '' if not
-        if facts.has_key('is_virtual'):
+        if 'is_virtual' in facts:
             _is_virtual = facts['is_virtual']
         else:
             _is_virtual = False
-        if facts.has_key('serialnumber'):
+        if 'serialnumber' in facts:
             _serialnumber = facts['serialnumber']
         else:
             _serialnumber = ''
-        if facts.has_key('processors::models'):
+        if 'processors::models' in facts:
                 _processors_models = ast.literal_eval(facts['processors::models'])
         else:
             _processors_models = ['']
@@ -210,5 +210,5 @@ def main():
 
 if __name__ == "__main__":
     retval = main()
-    print 'Done'
+    print('Done')
     sys.exit(retval)

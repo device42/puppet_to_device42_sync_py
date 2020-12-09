@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from six import string_types
 
 
 def node_filter(ndata, filterlist):
@@ -22,7 +23,7 @@ def node_filter(ndata, filterlist):
         # Here 'aroot' should contain target attribute
 
         wrong_op = False
-        if isinstance(aroot, basestring):
+        if isinstance(aroot, string_types):
             if oprt in ['iequal', 'ieq']:
                 retval = str(fval).lower() == aroot.lower()
             elif oprt in ['equal', 'eq']:
@@ -35,13 +36,13 @@ def node_filter(ndata, filterlist):
                 retval = str(fval).lower() >= aroot.lower()
             elif oprt in ['less', 'lt']:
                 retval = str(fval) >= aroot
-            elif optr in ['isubstr', 'icontains']:
+            elif oprt in ['isubstr', 'icontains']:
                 retval = aroot.lower().find(str(fval).lower()) >= 0
-            elif optr in ['substr', 'contains']:
+            elif oprt in ['substr', 'contains']:
                 retval = aroot.find(str(fval)) >= 0
-            elif optr in ['in', 'iin']:
+            elif oprt in ['in', 'iin']:
                 if isinstance(fval, (list, dict)):
-                    if optr == 'in':
+                    if oprt == 'in':
                         retval = aroot in fval
                     else:  # iin - case-insensitive 'in'
                         retval = any([True for v in fval if aroot.lower() == v.lower()])
@@ -53,16 +54,16 @@ def node_filter(ndata, filterlist):
                 wrong_op = True
 
         elif isinstance(aroot, (list, dict)):
-            if optr in ['has', 'contains']:
-                retval = str(fval) in aroot
-            elif optr in ['ihas', 'icontains']:
+            if oprt in ['has', 'contains']:
+                oprt = str(fval) in aroot
+            elif oprt in ['ihas', 'icontains']:
                 retval = any([True for v in aroot if fval.lower() == v.lower()])
-            elif optr in ['empty']:
+            elif oprt in ['empty']:
                 retval = not aroot
             else:
                 wrong_op = True
 
-        elif isinstance(aroot, (int, float, long)):
+        elif isinstance(aroot, (int, float)):
             if oprt in ['equal', 'eq']:
                 retval = fval == aroot
             elif oprt in ['greater', 'gt']:

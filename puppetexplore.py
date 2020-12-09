@@ -71,7 +71,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
             continue
 
         if options.get('show_node'):
-            print node
+            print(node)
 
         node_name = node['hostname']
 
@@ -209,7 +209,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                         except KeyError:
                             continue
 
-                        if type(step) in [unicode, str, int]:
+                        if type(step) in [str, int]:
                             value = step
                         elif type(step) in [list, tuple, dict]:
                             value = len(step)
@@ -301,7 +301,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                             updated_ips.append(updateinfo['msg'][1])
                             logger.info("IP %s for device %s updated/created (id %s)" % (ifs['ip6'], node_name, deviceid))
                         except device42.Device42HTTPError as e:
-                            print e
+                            print(e)
 
                         if 'network6' in ifs and 'netmask6' in ifs:
                             # update IPv6 subnet
@@ -316,7 +316,7 @@ def d42_update(dev42, nodes, options, static_opt, mapping, from_version='3', pup
                                 updated_ips.append(updateinfo['msg'][1])
                                 logger.info("Subnet %s/%s for device %s updated/created (id %s)" % (ifs['network6'], mask, node_name, deviceid))
                             except device42.Device42HTTPError as e:
-                                print e
+                                print(e)
 
             # Delete other IPs from the device
             if updated_ips:
@@ -406,5 +406,5 @@ def main():
 
 if __name__ == "__main__":
     retval = main()
-    print 'Done'
+    print('Done')
     sys.exit(retval)
