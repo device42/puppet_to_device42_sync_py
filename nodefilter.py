@@ -55,7 +55,7 @@ def node_filter(ndata, filterlist):
 
         elif isinstance(aroot, (list, dict)):
             if oprt in ['has', 'contains']:
-                oprt = str(fval) in aroot
+                retval = str(fval) in aroot
             elif oprt in ['ihas', 'icontains']:
                 retval = any([True for v in aroot if fval.lower() == v.lower()])
             elif oprt in ['empty']:
