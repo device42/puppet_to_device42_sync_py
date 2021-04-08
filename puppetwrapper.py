@@ -12,6 +12,7 @@
 
 import json
 import requests
+from six import string_types
 requests.packages.urllib3.disable_warnings()
 
 
@@ -74,7 +75,7 @@ class PuppetWrapper(object):
             newdata = {}
             for k, v in data.items():
                 newdata[k] = self._from_pson(v)
-        elif isinstance(data, basestring):
+        elif isinstance(data, string_types):
             # try convert ruby-styled serialized Hash to python dict
             if '"=>' in data:
                 try:
